@@ -1,0 +1,324 @@
+[Setup]
+AppName=Dela Tool
+AppVersion=1.0
+DefaultDirName={commonpf}\Dela Tools
+DisableDirPage=no
+DefaultGroupName=Dela Tool
+OutputBaseFilename=DelaToolSetup
+Compression=lzma
+SolidCompression=yes
+
+[Tasks]
+Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional Icons:"; Flags: unchecked
+
+[Files]
+Source: "agent.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallAgent
+Source: "agent_runner.py"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallAgent
+Source: "python_tool.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallPythonTool
+Source: "*.ps1"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallPythonTool
+
+[Icons]
+Name: "{commondesktop}\Dela Tool Agent"; Filename: "{app}\agent.exe"; Tasks: desktopicon
+Name: "{group}\Dela Tool Agent"; Filename: "{app}\agent.exe"
+
+[INI]
+Filename: "{app}\config.ini"; Section: "AWS"; Key: "Username"; String: "{code:GetAWSUsername}"
+Filename: "{app}\config.ini"; Section: "AWS"; Key: "Password"; String: "{code:GetEncryptedAWSPassword}"
+Filename: "{app}\config.ini"; Section: "PythonTool"; Key: "Port"; String: "{code:GetPythonToolPort}"
+
+[Run]
+; For InstallationChoice = 1 (Dela Tool and Agent)
+Filename: "cmd"; Parameters: "/C python agent_runner.py install && python agent_runner.py start"; WorkingDir: "{app}"; Flags: nowait postinstall skipifsilent; Description: "Install agent as a Windows service and run agent";Check: ShouldRunAgent
+Filename: "{app}\python_tool.exe"; Flags: nowait postinstall skipifsilent; Check: ShouldRunPythonTool
+
+
+[Code]
+var
+  AWSUsernameEdit: TEdit;
+  AWSPasswordEdit: TEdit;
+  PythonToolPortEdit: TEdit;
+  DomainControllerCheckBox: TCheckBox;
+
+  AWSUsername: string;
+  AWSPassword: string;
+  PythonToolPort: string;
+  HasDomainController: Boolean;
+
+  InstallOptionPage: TWizardPage;
+  DelaToolAndAgentRadioButton: TRadioButton;
+  InstallAgentRadioButton: TRadioButton;
+  InstallDelaToolRadioButton: TRadioButton;
+  InstallationChoice: Integer; // 1 = Dela Tool and Agent, 2 = Agent only, 3 = Dela Tool only
+
+function Base64Encode(const Input: string): string;
+var
+  I, J: Integer;
+  A, B, C: Byte;
+  Output: string;
+  Base64Table: string;
+begin
+  Output := '';
+  Base64Table := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  I := 1;
+  while I <= Length(Input) do
+  begin
+    A := Ord(Input[I]);
+    Inc(I);
+    if I <= Length(Input) then
+      B := Ord(Input[I])
+    else
+      B := 0;
+    Inc(I);
+    if I <= Length(Input) then
+      C := Ord(Input[I])
+    else
+      C := 0;
+    Inc(I);
+
+    Output := Output + Base64Table[(A shr 2) + 1];
+    Output := Output + Base64Table[((A and $03) shl 4) or (B shr 4) + 1];
+    if I - 2 <= Length(Input) then
+      Output := Output + Base64Table[((B and $0F) shl 2) or (C shr 6) + 1]
+    else
+      Output := Output + '=';
+    if I - 1 <= Length(Input) then
+      Output := Output + Base64Table[C and $3F + 1]
+    else
+      Output := Output + '=';
+  end;
+  Result := Output;
+end;
+
+function EncryptPassword(Pass: string): string;
+begin
+  Result := Base64Encode(Pass);
+end;
+
+function IsValidPort(Port: string): Boolean;
+var
+  ColonPos: Integer;
+  IP, PortNumber: string;
+begin
+  ColonPos := Pos(':', Port);
+  if ColonPos > 0 then
+  begin
+    IP := Copy(Port, 1, ColonPos - 1);
+    PortNumber := Copy(Port, ColonPos + 1, Length(Port) - ColonPos);
+    Result := (Length(IP) > 0) and (Length(PortNumber) > 0);
+  end
+  else
+    Result := False;
+end;
+
+procedure OnDelaToolAndAgentRadioButtonClick(Sender: TObject);
+begin
+  PythonToolPortEdit.Enabled := False;
+  InstallationChoice := 1;
+end;
+
+procedure OnInstallAgentRadioButtonClick(Sender: TObject);
+begin
+  PythonToolPortEdit.Enabled := True;
+  InstallationChoice := 2;
+end;
+
+procedure OnInstallDelaToolRadioButtonClick(Sender: TObject);
+begin
+  InstallationChoice := 3;
+end;
+
+procedure InitializeWizard();
+var
+  InputPage: TWizardPage;
+  AWSUsernameLabel, AWSPasswordLabel, PythonToolPortLabel: TLabel;
+begin
+  AWSUsername := '';
+  AWSPassword := '';
+  PythonToolPort := '';
+  InstallationChoice := 1;
+  
+  // Create Installation Options Page
+  InstallOptionPage := CreateCustomPage(wpSelectDir + 1, 'Installation Type', 'Choose which components to install.');
+
+  DelaToolAndAgentRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
+  DelaToolAndAgentRadioButton.Parent := InstallOptionPage.Surface;
+  DelaToolAndAgentRadioButton.Caption := '"Install Dela Tool and Agent"';
+  DelaToolAndAgentRadioButton.Left := 20;
+  DelaToolAndAgentRadioButton.Top := 20;
+  DelaToolAndAgentRadioButton.Checked := True;
+  DelaToolAndAgentRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
+  DelaToolAndAgentRadioButton.Height := 25;
+  DelaToolAndAgentRadioButton.OnClick := @OnDelaToolAndAgentRadioButtonClick;
+
+  InstallAgentRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
+  InstallAgentRadioButton.Parent := InstallOptionPage.Surface;
+  InstallAgentRadioButton.Caption := '"Install Agent Only"';
+  InstallAgentRadioButton.Left := 20;
+  InstallAgentRadioButton.Top := DelaToolAndAgentRadioButton.Top + DelaToolAndAgentRadioButton.Height + 25; // Adjusted spacing
+  InstallAgentRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
+  InstallAgentRadioButton.Height := 25;
+  InstallAgentRadioButton.OnClick := @OnInstallAgentRadioButtonClick;
+
+  InstallDelaToolRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
+  InstallDelaToolRadioButton.Parent := InstallOptionPage.Surface;
+  InstallDelaToolRadioButton.Caption := '"Install Dela Tool Only"';
+  InstallDelaToolRadioButton.Left := 20;
+  InstallDelaToolRadioButton.Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 25; // Adjusted spacing
+  InstallDelaToolRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
+  InstallDelaToolRadioButton.Height := 25;
+  InstallDelaToolRadioButton.OnClick := @OnInstallDelaToolRadioButtonClick;
+
+  // Add descriptions below each radio button
+  with TLabel.Create(InstallOptionPage.Surface) do
+  begin
+    Parent := InstallOptionPage.Surface;
+    Caption := 'Install both Dela Tool and Agent on this machine, running on your local domain controller.';
+    Left := 40;
+    Top := DelaToolAndAgentRadioButton.Top + DelaToolAndAgentRadioButton.Height + 5;
+    Font.Color := clGray;
+  end;
+
+  with TLabel.Create(InstallOptionPage.Surface) do
+  begin
+    Parent := InstallOptionPage.Surface;
+    Caption := 'Only the agent will be installed and run on this machine.';
+    Left := 40;
+    Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 5;
+    Font.Color := clGray;
+  end;
+
+  with TLabel.Create(InstallOptionPage.Surface) do
+  begin
+    Parent := InstallOptionPage.Surface;
+    Caption := 'Only the Dela Tool will be installed and run on this machine.';
+    Left := 40;
+    Top := InstallDelaToolRadioButton.Top + InstallDelaToolRadioButton.Height + 5;
+    Font.Color := clGray;
+  end;
+
+  // Create AWS Credentials Page
+  InputPage := CreateCustomPage(wpSelectDir + 2, 'AWS and Port Configuration', 'Enter your AWS credentials and tool configuration.');
+
+  AWSUsernameLabel := TLabel.Create(InputPage.Surface);
+  AWSUsernameLabel.Parent := InputPage.Surface;
+  AWSUsernameLabel.Caption := 'Agent Username:';
+  AWSUsernameLabel.Left := 10;
+  AWSUsernameLabel.Top := 20;
+
+  AWSUsernameEdit := TEdit.Create(InputPage.Surface);
+  AWSUsernameEdit.Parent := InputPage.Surface;
+  AWSUsernameEdit.Left := 10;
+  AWSUsernameEdit.Top := 40;
+  AWSUsernameEdit.Width := InputPage.SurfaceWidth - 20;
+
+  AWSPasswordLabel := TLabel.Create(InputPage.Surface);
+  AWSPasswordLabel.Parent := InputPage.Surface;
+  AWSPasswordLabel.Caption := 'Agent Password:';
+  AWSPasswordLabel.Left := 10;
+  AWSPasswordLabel.Top := 80;
+
+  AWSPasswordEdit := TEdit.Create(InputPage.Surface);
+  AWSPasswordEdit.Parent := InputPage.Surface;
+  AWSPasswordEdit.Left := 10;
+  AWSPasswordEdit.Top := 100;
+  AWSPasswordEdit.Width := AWSUsernameEdit.Width;
+  AWSPasswordEdit.PasswordChar := '*';
+
+  PythonToolPortLabel := TLabel.Create(InputPage.Surface);
+  PythonToolPortLabel.Parent := InputPage.Surface;
+  PythonToolPortLabel.Caption := 'Dela Tool Port (IP:PORT):';
+  PythonToolPortLabel.Left := 10;
+  PythonToolPortLabel.Top := 140;
+
+  PythonToolPortEdit := TEdit.Create(InputPage.Surface);
+  PythonToolPortEdit.Parent := InputPage.Surface;
+  PythonToolPortEdit.Left := 10;
+  PythonToolPortEdit.Top := 160;
+  PythonToolPortEdit.Width := AWSUsernameEdit.Width;
+  PythonToolPortEdit.Text := 'localhost:10060';
+  PythonToolPortEdit.Enabled := False; // Disabled by default (for "Dela Tool and Agent" installation)
+
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  Result := True;
+
+  if CurPageID = 101 then
+  begin
+    AWSUsername := AWSUsernameEdit.Text;
+    AWSPassword := AWSPasswordEdit.Text;
+    PythonToolPort := PythonToolPortEdit.Text;
+
+    if AWSUsername = '' then
+    begin
+      MsgBox('AWS Username cannot be empty.', mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+
+    if AWSPassword = '' then
+    begin
+      MsgBox('AWS Password cannot be empty.', mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+
+    if not IsValidPort(PythonToolPort) then
+    begin
+      MsgBox('Python Tool Port must be in the format IP:PORT.', mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+    
+  end;
+end;
+
+function ShouldInstallAgent: Boolean;
+begin
+  Result := (InstallationChoice = 1) or (InstallationChoice = 2)
+end;
+
+function ShouldInstallPythonTool: Boolean;
+begin
+  Result := (InstallationChoice = 1) or (InstallationChoice = 3);
+end;
+
+function ShouldRunAgent: Boolean;
+begin
+  Result := (InstallationChoice = 1) or (InstallationChoice = 2)
+end;
+
+function ShouldRunPythonTool: Boolean;
+begin
+  Result := (InstallationChoice = 1) or (InstallationChoice = 3);
+end;
+
+
+function GetAWSUsername(Param: string): string;
+begin
+  Result := AWSUsername;
+end;
+
+function GetEncryptedAWSPassword(Param: string): string;
+begin
+  Result := EncryptPassword(AWSPassword);
+end;
+
+function GetPythonToolPort(Param: string): string;
+begin
+  Result := PythonToolPort;
+end;
+
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  Result := False;
+
+  if PageID = 101 then
+  begin
+    if InstallationChoice = 3 then
+    begin
+      Result := True;
+    end;
+  end;
+end;
