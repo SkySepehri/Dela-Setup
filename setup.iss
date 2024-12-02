@@ -15,7 +15,7 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription:
 Source: "agent.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallAgent
 Source: "agent_runner.py"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallAgent
 Source: "python_tool.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallPythonTool
-Source: "*.ps1"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallPythonTool
+Source: ".\DC\*.ps1"; DestDir: "{app}\DC"; Flags: ignoreversion; Check: ShouldInstallPythonTool
 
 [Icons]
 Name: "{commondesktop}\Dela Tool Agent"; Filename: "{app}\agent.exe"; Tasks: desktopicon
@@ -28,8 +28,8 @@ Filename: "{app}\config.ini"; Section: "PythonTool"; Key: "Port"; String: "{code
 
 [Run]
 ; For InstallationChoice = 1 (Dela Tool and Agent)
-Filename: "cmd"; Parameters: "/C python agent_runner.py install && python agent_runner.py start"; WorkingDir: "{app}"; Flags: nowait postinstall skipifsilent; Description: "Install agent as a Windows service and run agent";Check: ShouldRunAgent
-Filename: "{app}\python_tool.exe"; Flags: nowait postinstall skipifsilent; Check: ShouldRunPythonTool
+Filename: "cmd"; Parameters: "/C python agent_runner.py install && python agent_runner.py start"; WorkingDir: "{app}"; Flags: postinstall skipifsilent; Description: "Install agent as a Windows service and run agent";Check: ShouldRunAgent
+Filename: "{app}\python_tool.exe"; Flags: postinstall skipifsilent; Check: ShouldRunPythonTool
 
 
 [Code]
@@ -110,21 +110,16 @@ begin
     Result := False;
 end;
 
-procedure OnDelaToolAndAgentRadioButtonClick(Sender: TObject);
-begin
-  PythonToolPortEdit.Enabled := False;
-  InstallationChoice := 1;
-end;
 
 procedure OnInstallAgentRadioButtonClick(Sender: TObject);
 begin
   PythonToolPortEdit.Enabled := True;
-  InstallationChoice := 2;
+  InstallationChoice := 1;
 end;
 
 procedure OnInstallDelaToolRadioButtonClick(Sender: TObject);
 begin
-  InstallationChoice := 3;
+  InstallationChoice := 2;
 end;
 
 procedure InitializeWizard();
@@ -140,61 +135,67 @@ begin
   // Create Installation Options Page
   InstallOptionPage := CreateCustomPage(wpSelectDir + 1, 'Installation Type', 'Choose which components to install.');
 
-  DelaToolAndAgentRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
-  DelaToolAndAgentRadioButton.Parent := InstallOptionPage.Surface;
-  DelaToolAndAgentRadioButton.Caption := '"Install Dela Tool and Agent"';
-  DelaToolAndAgentRadioButton.Left := 20;
-  DelaToolAndAgentRadioButton.Top := 20;
-  DelaToolAndAgentRadioButton.Checked := True;
-  DelaToolAndAgentRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
-  DelaToolAndAgentRadioButton.Height := 25;
-  DelaToolAndAgentRadioButton.OnClick := @OnDelaToolAndAgentRadioButtonClick;
-
   InstallAgentRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
-  InstallAgentRadioButton.Parent := InstallOptionPage.Surface;
-  InstallAgentRadioButton.Caption := '"Install Agent Only"';
-  InstallAgentRadioButton.Left := 20;
-  InstallAgentRadioButton.Top := DelaToolAndAgentRadioButton.Top + DelaToolAndAgentRadioButton.Height + 25; // Adjusted spacing
-  InstallAgentRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
-  InstallAgentRadioButton.Height := 25;
-  InstallAgentRadioButton.OnClick := @OnInstallAgentRadioButtonClick;
+InstallAgentRadioButton.Parent := InstallOptionPage.Surface;
+InstallAgentRadioButton.Caption := '"Install Dela Proxy Only"';
+InstallAgentRadioButton.Left := 20;
+InstallAgentRadioButton.Top := 10;
+InstallAgentRadioButton.Checked := True;
+InstallAgentRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
+InstallAgentRadioButton.Height := 25;
+InstallAgentRadioButton.OnClick := @OnInstallAgentRadioButtonClick;
 
-  InstallDelaToolRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
-  InstallDelaToolRadioButton.Parent := InstallOptionPage.Surface;
-  InstallDelaToolRadioButton.Caption := '"Install Dela Tool Only"';
-  InstallDelaToolRadioButton.Left := 20;
-  InstallDelaToolRadioButton.Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 25; // Adjusted spacing
-  InstallDelaToolRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
-  InstallDelaToolRadioButton.Height := 25;
-  InstallDelaToolRadioButton.OnClick := @OnInstallDelaToolRadioButtonClick;
+InstallDelaToolRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
+InstallDelaToolRadioButton.Parent := InstallOptionPage.Surface;
+InstallDelaToolRadioButton.Caption := '"Install Dela Tool Only"';
+InstallDelaToolRadioButton.Left := 20;
+InstallDelaToolRadioButton.Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 100; 
+InstallDelaToolRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
+InstallDelaToolRadioButton.Height := 25;
+InstallDelaToolRadioButton.OnClick := @OnInstallDelaToolRadioButtonClick;
 
-  // Add descriptions below each radio button
-  with TLabel.Create(InstallOptionPage.Surface) do
-  begin
-    Parent := InstallOptionPage.Surface;
-    Caption := 'Install both Dela Tool and Agent on this machine, running on your local domain controller.';
-    Left := 40;
-    Top := DelaToolAndAgentRadioButton.Top + DelaToolAndAgentRadioButton.Height + 5;
-    Font.Color := clGray;
-  end;
+with TLabel.Create(InstallOptionPage.Surface) do
+begin
+  Parent := InstallOptionPage.Surface;
+  Caption := 'Dela Proxy is a program that runs as a service, connecting to the Dela tool on';
+  Left := 40;
+  Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 5;
+  Width := InstallOptionPage.SurfaceWidth - 80;  
+  Font.Color := clGray;
+end;
 
-  with TLabel.Create(InstallOptionPage.Surface) do
-  begin
-    Parent := InstallOptionPage.Surface;
-    Caption := 'Only the agent will be installed and run on this machine.';
-    Left := 40;
-    Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 5;
-    Font.Color := clGray;
-  end;
+with TLabel.Create(InstallOptionPage.Surface) do
+begin
+  Parent := InstallOptionPage.Surface;
+  Caption := 'a different domain controller.';
+  Left := 40;
+  Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 30; 
+  Width := InstallOptionPage.SurfaceWidth - 80;  
+  Font.Color := clGray;
+end;
 
-  with TLabel.Create(InstallOptionPage.Surface) do
-  begin
-    Parent := InstallOptionPage.Surface;
-    Caption := 'Only the Dela Tool will be installed and run on this machine.';
-    Left := 40;
-    Top := InstallDelaToolRadioButton.Top + InstallDelaToolRadioButton.Height + 5;
-    Font.Color := clGray;
-  end;
+with TLabel.Create(InstallOptionPage.Surface) do
+begin
+  Parent := InstallOptionPage.Surface;
+  Caption := 'Only the Dela Tool will be installed and run on this machine. It will capture ';
+  Left := 40;
+  Top := InstallDelaToolRadioButton.Top + InstallDelaToolRadioButton.Height + 5;
+  Width := InstallOptionPage.SurfaceWidth - 80; 
+  Font.Color := clGray;
+end;
+
+with TLabel.Create(InstallOptionPage.Surface) do
+begin
+  Parent := InstallOptionPage.Surface;
+  Caption := 'domain controller information and send the results to the Dela Proxy.';
+  Left := 40;
+  Top := InstallDelaToolRadioButton.Top + InstallDelaToolRadioButton.Height + 30; // Adjusted spacing
+  Width := InstallOptionPage.SurfaceWidth - 80;  // Adjusted width
+  Font.Color := clGray;
+end;
+
+
+
 
   // Create AWS Credentials Page
   InputPage := CreateCustomPage(wpSelectDir + 2, 'AWS and Port Configuration', 'Enter your AWS credentials and tool configuration.');
@@ -226,7 +227,7 @@ begin
 
   PythonToolPortLabel := TLabel.Create(InputPage.Surface);
   PythonToolPortLabel.Parent := InputPage.Surface;
-  PythonToolPortLabel.Caption := 'Dela Tool Port (IP:PORT):';
+  PythonToolPortLabel.Caption := 'Dela Tool Address (IP:PORT):';
   PythonToolPortLabel.Left := 10;
   PythonToolPortLabel.Top := 140;
 
@@ -236,7 +237,7 @@ begin
   PythonToolPortEdit.Top := 160;
   PythonToolPortEdit.Width := AWSUsernameEdit.Width;
   PythonToolPortEdit.Text := 'localhost:10060';
-  PythonToolPortEdit.Enabled := False; // Disabled by default (for "Dela Tool and Agent" installation)
+  PythonToolPortEdit.Enabled := False; 
 
 end;
 
@@ -252,21 +253,21 @@ begin
 
     if AWSUsername = '' then
     begin
-      MsgBox('AWS Username cannot be empty.', mbError, MB_OK);
+      MsgBox('Username cannot be empty.', mbError, MB_OK);
       Result := False;
       Exit;
     end;
 
     if AWSPassword = '' then
     begin
-      MsgBox('AWS Password cannot be empty.', mbError, MB_OK);
+      MsgBox('Password cannot be empty.', mbError, MB_OK);
       Result := False;
       Exit;
     end;
 
     if not IsValidPort(PythonToolPort) then
     begin
-      MsgBox('Python Tool Port must be in the format IP:PORT.', mbError, MB_OK);
+      MsgBox('Dela Tool Address must be in the format IP:PORT.', mbError, MB_OK);
       Result := False;
       Exit;
     end;
@@ -276,22 +277,22 @@ end;
 
 function ShouldInstallAgent: Boolean;
 begin
-  Result := (InstallationChoice = 1) or (InstallationChoice = 2)
+  Result := (InstallationChoice = 1)
 end;
 
 function ShouldInstallPythonTool: Boolean;
 begin
-  Result := (InstallationChoice = 1) or (InstallationChoice = 3);
+  Result := (InstallationChoice = 2);
 end;
 
 function ShouldRunAgent: Boolean;
 begin
-  Result := (InstallationChoice = 1) or (InstallationChoice = 2)
+  Result := (InstallationChoice = 1)
 end;
 
 function ShouldRunPythonTool: Boolean;
 begin
-  Result := (InstallationChoice = 1) or (InstallationChoice = 3);
+  Result := (InstallationChoice = 2);
 end;
 
 
@@ -316,7 +317,7 @@ begin
 
   if PageID = 101 then
   begin
-    if InstallationChoice = 3 then
+    if InstallationChoice = 2 then
     begin
       Result := True;
     end;
