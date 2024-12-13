@@ -14,7 +14,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS019"
+        ItemNumber = "ADS024"
         UseCase = "AD Display Specifiers Misconfiguration"
         WeightedScore = 20
         TechnicalInformation = "AD Display Specifiers in Active Directory define the attributes used to display user, group, and computer objects in the Active Directory Users and Computers (ADUC) console. If these specifiers are misconfigured, they can potentially expose sensitive information or be used to mislead administrators about object properties."
@@ -61,4 +61,4 @@
 
 # Example usage
 $result = Check-ADDisplaySpecifiers
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

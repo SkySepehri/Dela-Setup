@@ -5,7 +5,7 @@
     )
 
     $result = @{
-        ItemNumber = "ADS029"
+        ItemNumber = "ADS036"
         UseCase = "NBT-NS & LLMNR Poisoning"
         WeightedScore = 5
         TechnicalInformation = "NBT-NS (NetBIOS Name Service) and LLMNR (Link-Local Multicast Name Resolution) are network protocols used for name resolution. If enabled, they can be exploited by attackers to perform spoofing attacks or intercept network traffic."
@@ -130,4 +130,4 @@ your DNS servers. 8003,4319,1014 and 1015"
 
 # Example usage
 $result = Check-NBT-NSAndLLMNR -ComputerName "AgentComputerName"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

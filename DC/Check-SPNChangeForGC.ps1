@@ -7,7 +7,7 @@ function Check-SPNChangeForGC {
     )
 
     $result = @{
-        ItemNumber = "ADS018"
+        ItemNumber = "ADS011"
         UseCase = "SPN Changes for Global Catalog"
         WeightedScore = 5
         TechnicalInformation = "Monitoring SPN changes for Global Catalog servers helps detect potential misconfigurations or malicious activity. Attackers can exploit SPN changes to impersonate services or disrupt authentication processes."
@@ -50,4 +50,4 @@ function Check-SPNChangeForGC {
 
 # Example usage
 $result = Check-SPNChangeForGC -serverName "AgentServerName" -logName "Security" -daysBack 7
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

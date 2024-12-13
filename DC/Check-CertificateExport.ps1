@@ -30,7 +30,7 @@ function Check-CertificateExport {
     )
 
     $result = @{
-        ItemNumber = "ADS011"
+        ItemNumber = "ADS039"
         UseCase = "Certificate Export Events in ADFS"
         WeightedScore = 5
         TechnicalInformation = "Identifying certificate export events in ADFS is crucial for detecting potential security breaches. Certificates are critical for securing communications and authenticating users. If an attacker can export certificates, they can potentially impersonate users or decrypt sensitive communications, leading to unauthorized access and data breaches."
@@ -82,4 +82,4 @@ function Check-CertificateExport {
 
 # Example usage
 $result = Check-CertificateExport -serverName "Vul-DC"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

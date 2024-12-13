@@ -3,7 +3,7 @@
     param()
 
     $result = @{
-        ItemNumber = "ADS010"
+        ItemNumber = "ADS020"
         UseCase = "Anonymous Access to Active Directory"
         WeightedScore = 5
         TechnicalInformation = "Anonymous access to Active Directory allows users or attackers to query the directory without authentication. This can expose sensitive information, such as user accounts and group memberships, which can be exploited for reconnaissance or privilege escalation."
@@ -37,4 +37,4 @@
 
 # Example usage
 $result = Check-AnonymousAccessToAD
-Write-Output $result
+Write-Output $result| ConvertTo-Json -Depth 10

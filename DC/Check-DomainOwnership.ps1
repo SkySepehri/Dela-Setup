@@ -22,7 +22,7 @@ function Check-DomainOwnership {
     # }
 
     $result = @{
-        ItemNumber = "ADS019"
+        ItemNumber = "ADS006"
         UseCase = "Domain Ownership"
         WeightedScore = 5
         TechnicalInformation = "Domain ownership in Active Directory refers to which entity or user has control over the domain settings. Improper or unauthorized ownership can be exploited by attackers to manipulate domain configurations, leading to potential security breaches. Verifying domain ownership ensures that only authorized administrators have control, reducing the risk of malicious changes."
@@ -76,4 +76,4 @@ function Check-DomainOwnership {
 
 # Example usage
 $result = Check-DomainOwnership -settings $settings
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

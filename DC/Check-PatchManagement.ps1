@@ -4,7 +4,7 @@ function Check-PatchManagement {
     param ()
 
     $result = @{
-        ItemNumber = "PM001"
+        ItemNumber = "ADS003"
         UseCase = "Ensure Proper Patch Management Configuration"
         WeightedScore = 5
         TechnicalInformation = "This function checks if the patch management settings are properly configured on the systems. Patch management is crucial for keeping systems up-to-date with the latest security updates and fixes, which helps protect against vulnerabilities and potential security threats."
@@ -37,4 +37,4 @@ function Check-PatchManagement {
 
 # Example usage
 $result = Check-PatchManagement
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

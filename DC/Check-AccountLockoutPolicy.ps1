@@ -6,7 +6,7 @@ function Check-AccountLockoutPolicy {
     param()
 
     $result = @{
-        ItemNumber = "ADS009"
+        ItemNumber = "ADS023"
         UseCase = "Account Lockout Policy"
         WeightedScore = 5
         TechnicalInformation = "This function checks the account lockout policy in Active Directory. The account lockout policy helps protect against brute force attacks by locking out user accounts after a specified number of failed login attempts. If this policy is misconfigured or not set, attackers can repeatedly attempt to guess passwords without being locked out, increasing the risk of unauthorized access."
@@ -42,4 +42,4 @@ function Check-AccountLockoutPolicy {
 
 # Example usage
 $result = Check-AccountLockoutPolicy
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

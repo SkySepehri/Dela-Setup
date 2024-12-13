@@ -3,7 +3,7 @@
     param()
 
     $result = @{
-        ItemNumber = "ADS029"
+        ItemNumber = "ADS028"
         UseCase = "Inactive Domain Controllers"
         WeightedScore = 5
         TechnicalInformation = "Domain Controllers are essential for managing security, authentication, and directory services. If a Domain Controller is inactive, it may indicate network issues, hardware failures, or misconfigurations. This use case retrieves information about all Domain Controllers and identifies any that are not actively communicating, allowing IT administrators to investigate and address any problems."
@@ -57,4 +57,4 @@
 
 # Example usage
 $result = Check-InactiveDC
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

@@ -13,7 +13,7 @@
     #     Status                 = $null
     # }
     $result = @{
-        ItemNumber = "ADS023"
+        ItemNumber = "ADS030"
         UseCase = "DC Print Spooler Misconfiguration"
         WeightedScore = 50
         TechnicalInformation = "This technique involves exploiting vulnerabilities in software to execute code on a target system. The Print Spooler service, particularly the vulnerabilities associated with it (such as CVE-2021-34527, known as PrintNightmare), allows attackers to execute arbitrary code with SYSTEM privileges. By exploiting this vulnerability, attackers can gain unauthorized access, escalate privileges, and potentially compromise the entire domain."
@@ -62,4 +62,4 @@ Run gpupdate /force to apply changes"
 
 # Example usage
 $result = Check-DCPrintSpoolerEnabled
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

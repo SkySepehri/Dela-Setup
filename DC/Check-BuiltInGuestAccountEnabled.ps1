@@ -59,4 +59,4 @@
 
 # Example usage
 $result =  Check-BuiltInGuestAccountEnabled
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

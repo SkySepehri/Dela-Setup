@@ -17,7 +17,7 @@ function Check-ConstrainedDelegation {
     # }
 
     $result = @{
-        ItemNumber = "ADS004"
+        ItemNumber = "ADS005"
         UseCase = "Constrained Delegation"
         WeightedScore = 5
         TechnicalInformation = "Ensures no constrained delegations  transition are applied to Domain Controllers (DCs). This setup allows a delegate to impersonate users without proper service limitations, potentially enabling domain control by impersonating a domain admin and making unauthorized modifications via LDAP. The configuration is managed through the msDS-AllowedToDelegateTo attribute and a flag in userAccountControl."
@@ -111,4 +111,4 @@ function Check-ConstrainedDelegation {
 
 # Example usage
 $result = Check-ConstrainedDelegation -DomainController "AgentDomainController"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

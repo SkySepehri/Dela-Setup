@@ -11,7 +11,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS028"
+        ItemNumber = "ADS035"
         UseCase = "PAM Trust - Bastion Forest Managed"
         WeightedScore = 25
         TechnicalInformation = "A bastion forest is designed to manage and secure trust relationships between domains. To check if the current domain is managed by a bastion forest, examine trust attributes specifically for Privileged Access Management (PAM) trust. PAM trusts are used to enforce strict security measures for privileged accounts."
@@ -94,4 +94,4 @@
 
 # Example usage
 $result = Check-BastionForestManagement
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

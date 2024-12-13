@@ -14,7 +14,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS022"
+        ItemNumber = "ADS027"
         UseCase = "Dangerous Trust Attribute Set"
         WeightedScore = 20
         TechnicalInformation = "Trusts with dangerous attributes in Active Directory involve configurations that can expose the network to security risks, such as excessive permissions or unsecure trust relationships. Attackers can exploit these vulnerabilities to gain unauthorized access or escalate privileges."
@@ -60,4 +60,4 @@
 
 # Example usage
 $result = Check-DangerousTrustAttributes
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

@@ -14,7 +14,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS020"
+        ItemNumber = "ADS025"
         UseCase = "Foreign Security Principals Misconfiguration"
         WeightedScore = 20
         TechnicalInformation = "Foreign Security Principals in Active Directory are objects that represent security principals from external domains or forests. These objects are typically used to grant permissions to users or groups outside the local domain. Checking for Foreign Security Principals helps identify any external accounts or groups that have been granted access to resources within your domain, ensuring that permissions are correctly managed and no unauthorized external entities have access."
@@ -64,4 +64,4 @@ To modify permissions, right-click the foreign security principal, select Add to
 
 # Example usage
 $result = Check-ForeignSecurityPrincipals
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

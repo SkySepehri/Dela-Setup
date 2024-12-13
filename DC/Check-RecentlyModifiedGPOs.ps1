@@ -6,7 +6,7 @@
     )
 
     $result = @{
-        ItemNumber = "ADS032"
+        ItemNumber = "ADS013"
         UseCase = "Trace of Suspicious GPOs Modification"
         WeightedScore = 5
         TechnicalInformation = "Group Policy Objects (GPOs) are configurations in Active Directory that manage user and computer settings across a network. Recent modifications to GPOs can indicate potential attacks or unauthorized changes. Attackers may alter GPOs to deploy malicious settings, escalate privileges, or disrupt system operations, potentially leading to security breaches or system compromise."
@@ -95,4 +95,4 @@
 
 # Example usage
 $result = Check-RecentlyModifiedGPOs -daysThreshold 7
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

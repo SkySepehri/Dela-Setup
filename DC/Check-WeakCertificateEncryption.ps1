@@ -14,7 +14,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS017"
+        ItemNumber = "ADS021"
         UseCase = "Weak Certificate Encryption"
         WeightedScore = 5
         TechnicalInformation = "Weak certificate encryption in the local certificate store can leave sensitive data vulnerable to decryption by attackers. If certificates use outdated or insecure algorithms, they can be exploited to compromise encrypted communications or data integrity. "
@@ -65,4 +65,4 @@
 
 # Example usage
 $result = Check-WeakCertificateEncryption
-Write-Output $result
+Write-Output $result| ConvertTo-Json -Depth 10

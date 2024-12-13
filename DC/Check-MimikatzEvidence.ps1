@@ -16,7 +16,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS024"
+        ItemNumber = "ADS031"
         UseCase = "Evidence of Mimikatz"
         WeightedScore = 5
         TechnicalInformation = "Mimikatz and its variants are tools used to extract sensitive information like plaintext passwords and Kerberos tickets from memory. Detecting evidence of these tools on a system is crucial, as they can indicate an attacker’s attempt to compromise credentials or escalate privileges."
@@ -61,4 +61,4 @@
 
 # Example usage
 $result = Check-MimikatzEvidence -serverName "AgentServerName"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

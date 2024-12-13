@@ -14,7 +14,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS003"
+        ItemNumber = "ADS004"
         UseCase = "Unconstrained Delegation"
         WeightedScore = 5
         TechnicalInformation = "Ensures no account can impersonate any other account. Unconstrained delegation allows a captured Kerberos TGT to access any service the user has access to. If an attacker captures the TGT of an administrator or domain controller, they can potentially compromise the entire domain, especially if the connection can be forced via the spooler service."
@@ -78,4 +78,4 @@
 
 # Example usage
 $result = Check-UnconstrainedDelegation
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

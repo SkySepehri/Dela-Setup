@@ -14,7 +14,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS008"
+        ItemNumber = "ADS009"
         UseCase = "Inheritance enabled on AdminSDHolder"
         WeightedScore = 5
         TechnicalInformation = "The AdminSDHolder object in Active Directory protects privileged accounts by applying strict permissions. If inheritance is enabled on this object, it can unintentionally allow less restrictive permissions to flow down, weakening security. Attackers may exploit this to gain unauthorized access to high-privilege accounts."
@@ -82,4 +82,4 @@ For other control paths, manual investigation is needed. A list of Exchange Serv
 
 # Example usage
 $result = Check-AdminSDHolderInheritance
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

@@ -3,7 +3,7 @@
     param()
 
     $result = @{
-        ItemNumber = "TS001"
+        ItemNumber = "ADS022"
         UseCase = "Ensure Server Time Synchronization with Reliable Source"
         WeightedScore = 5
         TechnicalInformation = "Accurate time synchronization is crucial for the proper functioning of network services, security protocols, and logging. It helps ensure that all systems in the network are operating on the same time, which is essential for coordination and troubleshooting. If time synchronization is misconfigured, attackers can exploit this to evade detection, manipulate logs, and disrupt security protocols."
@@ -37,4 +37,4 @@
 
 # Example usage
 $result = Check-TimeSync
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

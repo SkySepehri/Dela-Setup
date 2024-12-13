@@ -58,7 +58,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS013"
+        ItemNumber = "ADS017"
         UseCase = "NTLM Misconfiguration "
         WeightedScore = 9
         TechnicalInformation = "NTLM (NT LAN Manager) is an authentication protocol used by Windows systems. Misconfigured NTLM settings can expose systems to security risks, such as pass-the-hash attacks or relay attacks, where attackers intercept and use NTLM authentication credentials to gain unauthorized access to network resources."
@@ -107,4 +107,4 @@ In addition, implement network segmentation and monitoring to detect and prevent
 
 # Example usage
 $result = Check-NTLMConfiguration -DomainController "AgentDomainControllerName"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

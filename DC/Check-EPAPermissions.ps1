@@ -67,22 +67,8 @@
     #     return $result
     # }
 
-    # $result = @{
-    #     ItemNumber = "ADS004"
-    #     UseCase = "Constrained Delegation"
-    #     WeightedScore = 5
-    #     TechnicalInformation = "Ensures no constrained delegations  transition are applied to Domain Controllers (DCs). This setup allows a delegate to impersonate users without proper service limitations, potentially enabling domain control by impersonating a domain admin and making unauthorized modifications via LDAP. The configuration is managed through the msDS-AllowedToDelegateTo attribute and a flag in userAccountControl."
-    #     Category = "Object Privilege & Configuration"
-    #     TechnicalDetails = $null # will fullfill later 
-    #     RemedediationSolution = 
-    #     "Constrained delegation with protocol transition or having constrained authentication delegationsto a domain controller service must not be allowed.Edit the msDS-AllowedToDelegateTo attribute for the accounts listed below to remove the SPNs associated with the domain controllers involved.This can be fixed with PowerShell too,the following command can be used to remove such a delegation on a target computer named COMPUTER: Set-ADComputer COMPUTER -PrincipalsAllowedToDelegateToAccount $Null"
-    #     MITREMapping = "[MITRE] T1187: Forced Authentication"
-    #     Status = $null
-    #     ErrorMsg = $null 
-    # }
-
     $result = @{
-        ItemNumber =  "ADS033"
+        ItemNumber =  "ADS014"
         UseCase = "Misconfigured EPA Permissions"
         WeightedScore = 5
         TechnicalInformation = "Enrollment Policy Agent (EPA) permissions control access to certificate enrollment processes in Active Directory Certificate Services (ADCS). Improperly configured EPA permissions can be exploited by attackers to enroll unauthorized certificates, potentially allowing them to impersonate users, escalate privileges, or gain unauthorized access to secure resources."    
@@ -141,4 +127,4 @@ In the same registry path, confirm that the Configuration key contains the corre
 
 # Example usage
 $result = Check-EPAPermissions -DomainController "AgentDomainController"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

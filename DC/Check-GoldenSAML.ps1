@@ -84,4 +84,4 @@ function Check-GoldenSAML {
 
 # Example usage
 $result = Check-GoldenSAML -serverName "Vul-DC"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

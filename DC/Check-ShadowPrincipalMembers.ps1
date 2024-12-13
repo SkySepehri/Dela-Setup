@@ -11,7 +11,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS027"
+        ItemNumber = "ADS034"
         UseCase = "PAM Trust -  Shadow Principal Members"
         WeightedScore = 25
         TechnicalInformation = "Shadow principals are unauthorized or hidden accounts that can potentially bypass security controls and gain illicit access. Checking which users or principals are members of shadow principals helps identify and address these covert accounts."
@@ -80,4 +80,4 @@
 
 # Example usage
 $result = Check-ShadowPrincipalMembers
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

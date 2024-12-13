@@ -4,7 +4,7 @@
     )
 
     $result = @{
-        ItemNumber = "ADS021"
+        ItemNumber = "ADS026"
         UseCase = "Obsolete OS"
         WeightedScore = 20
         TechnicalInformation = "Obsolete operating systems in Active Directory refer to outdated OS versions that no longer receive security updates or patches. These systems are vulnerable to exploitation, as attackers can target unpatched vulnerabilities."
@@ -52,4 +52,4 @@
 
 # # Example usage
 $result = Check-ObsoleteOS -Server "lab.local"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

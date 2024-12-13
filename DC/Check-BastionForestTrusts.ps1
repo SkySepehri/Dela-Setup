@@ -11,7 +11,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS026"
+        ItemNumber = "ADS033"
         UseCase = "PAM Trust - Bastion Forest Trusts"
         WeightedScore = 5
         TechnicalInformation = "A bastion forest is a domain specifically set up to manage and protect trust relationships between forests, often with heightened security measures. By examining trust relationships and detecting shadow principals (unauthorized or hidden accounts), you can determine if the current domain is configured as a bastion forest."
@@ -96,4 +96,4 @@
 
 # Example usage
 $result = Check-BastionForestTrusts
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

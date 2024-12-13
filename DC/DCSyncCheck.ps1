@@ -5,7 +5,7 @@
     )
 
     $result = @{
-        ItemNumber = "ADS030"
+        ItemNumber = "ADS037"
         UseCase = "DCSync attack detection"
         WeightedScore = 20
         TechnicalInformation = "DCSync is a technique used to replicate the Active Directory Domain Controller’s (DC) data to an attacker’s machine, allowing them to extract sensitive information such as password hashes and Kerberos tickets. This attack can be leveraged to gain elevated privileges or move laterally within the network by impersonating accounts and decrypting stored credentials."
@@ -147,4 +147,4 @@
 
 # Example usage
 $result = DCSyncCheck -Domain "AgentDomainName"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

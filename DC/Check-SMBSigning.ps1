@@ -14,7 +14,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS015"
+        ItemNumber = "ADS019"
         UseCase = "Disabled SMB Signing and Relaying NTLMv2 Hashes"
         WeightedScore = 5
         TechnicalInformation = "SMB signing is a security feature that helps protect against man-in-the-middle attacks by ensuring that SMB (Server Message Block) communication is authenticated and tamper-evident. If SMB signing is disabled, attackers can intercept or modify network traffic. Checking if SMB signing is enabled on the system helps ensure that data integrity and authenticity are maintained, reducing the risk of attacks on SMB communications.
@@ -67,4 +67,4 @@ This approach enhances network security against SMB relay attacks by properly co
 
 # Example usage
 $result = Check-SMBSigning
-Write-Output $result
+Write-Output $result| ConvertTo-Json -Depth 10

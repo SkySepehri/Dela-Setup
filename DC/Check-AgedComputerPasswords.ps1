@@ -85,4 +85,4 @@
 
 # Example usage
 $result = Check-AgedComputerPasswords
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

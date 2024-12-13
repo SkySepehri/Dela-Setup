@@ -11,7 +11,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS025"
+        ItemNumber = "ADS032"
         UseCase = "Suspicious Same Domain SID History"
         WeightedScore = 25
         TechnicalInformation = "SIDHistory is an attribute that tracks security identifiers (SIDs) when objects are migrated between domains or forests. Suspicious entries in SIDHistory can indicate potential forest-to-forest compromises, as attackers may use these entries to gain unauthorized access or escalate privileges."
@@ -79,4 +79,4 @@
 
 # Example usage
 $result = Detect-SameDomainSIDHistory
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

@@ -3,7 +3,7 @@
     param()
     
     $result = @{
-        ItemNumber = "SMB001"
+        ItemNumber = "ADS015"
         UseCase = "Check if SMBv1 is Enabled"
         WeightedScore = 5
         TechnicalInformation = "This function checks if the SMBv1 protocol is enabled on the system. SMBv1 is an outdated and insecure protocol that can expose the system to vulnerabilities and security risks. It is recommended to use newer versions like SMBv2 or SMBv3 for better security."
@@ -36,4 +36,4 @@
 
 # Example usage
 $result = Check-SMBv1Enabled
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

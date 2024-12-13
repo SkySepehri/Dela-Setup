@@ -11,7 +11,7 @@ function Check-MSSQLAbuse {
     )
 
     $result = @{
-        ItemNumber = "MSSQL001"
+        ItemNumber = "ADS016"
         UseCase = "Detection of Potential MSSQL Abuse"
         WeightedScore = 5
         TechnicalInformation = "This function checks if the xp_cmdshell feature is enabled on SQL Server instances. xp_cmdshell allows the execution of operating system commands directly from SQL Server, which can be leveraged by attackers to execute malicious commands and gain control over the server if misconfigured."
@@ -42,4 +42,4 @@ function Check-MSSQLAbuse {
 
 # Example usage
 $result = Check-MSSQLAbuse -SQLInstance "AgentSQLInstance"
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10

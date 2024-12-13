@@ -11,7 +11,7 @@
     # }
 
     $result = @{
-        ItemNumber = "ADS009"
+        ItemNumber = "ADS010"
         UseCase = "Azure AD Connect - Pass-Through Authentication"
         WeightedScore = 5
         TechnicalInformation = "PTA Spy is a tool used by attackers to capture and monitor security tokens or credentials in a Privileged Token Access (PTA) environment. Checking for the presence of PTA Spy on a machine helps identify potential security breaches or malicious activities aimed at compromising sensitive access controls."
@@ -107,4 +107,4 @@ Auditing and Logging: Any connection from the Azure AD Connect Sync user that is
 
 # Example usage
 $result = Check-PTASpyPresence
-Write-Output $result
+Write-Output $result | ConvertTo-Json -Depth 10
