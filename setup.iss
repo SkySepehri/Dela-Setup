@@ -9,6 +9,7 @@ Compression=lzma
 SolidCompression=yes
 
 
+
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional Icons:"; Flags: unchecked
 
@@ -150,7 +151,7 @@ InstallDelaToolRadioButton := TRadioButton.Create(InstallOptionPage.Surface);
 InstallDelaToolRadioButton.Parent := InstallOptionPage.Surface;
 InstallDelaToolRadioButton.Caption := '"Install Dela Tool Only"';
 InstallDelaToolRadioButton.Left := 20;
-InstallDelaToolRadioButton.Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 100; 
+InstallDelaToolRadioButton.Top := InstallAgentRadioButton.Top + InstallAgentRadioButton.Height + 80; 
 InstallDelaToolRadioButton.Width := InstallOptionPage.SurfaceWidth - 40;
 InstallDelaToolRadioButton.Height := 25;
 InstallDelaToolRadioButton.OnClick := @OnInstallDelaToolRadioButtonClick;
@@ -239,7 +240,7 @@ begin
  
     if AWSUsername = '' then
     begin
-      MsgBox('Username cannot be empty.', mbError, MB_OK);
+      MsgBox('Username cannot be empty. ', mbError, MB_OK);
       Result := False;
       Exit;
     end;
