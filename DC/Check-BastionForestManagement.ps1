@@ -1,15 +1,4 @@
 ﻿function Check-BastionForestManagement {
-    # $result = @{
-    #     Description            = "Checks if the current domain is managed by a bastion forest by examining trust attributes for PAM trust."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings               = $null
-    #     FindingSummary         = $null
-    #     Score                  = $null
-    #     Remediation            = "Review the trust relationships and ensure proper security configurations. If PAM trust is detected, verify that all PAM-related security controls are in place."
-    #     Status                 = $null
-    # }
-
     $result = @{
         ItemNumber = "ADS035"
         UseCase = "PAM Trust - Bastion Forest Managed"

@@ -1,14 +1,4 @@
 ﻿function Check-PTASpyPresence {
-    # $result = @{
-    #     Description            = "Checks for the presence of PTA Spy on the machine."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings               = $null
-    #     FindingSummary         = $null
-    #     Score                  = $null
-    #     Remediation            = "If PTA Spy is detected, immediately remove the tool, investigate the source, and ensure all relevant security controls are in place."
-    #     Status                 = $null
-    # }
 
     $result = @{
         ItemNumber = "ADS010"
@@ -32,40 +22,6 @@ Auditing and Logging: Any connection from the Azure AD Connect Sync user that is
         ErrorMsg = $null 
     }
 
-    # try {
-    #     $findings = @()
-
-    #     # Step 1: Check if PassthroughAuthPSModule is installed
-    #     $ptaModule = Get-Module -Name "PassthroughAuthPSModule" -ListAvailable
-    #     if ($ptaModule) {
-    #         $findings += "PassthroughAuthPSModule is installed on this machine."
-    #     } else {
-    #         $findings += "PassthroughAuthPSModule is NOT installed on this machine."
-    #     }
-
-    #     # Step 2: Check if PTA Spy directory exists
-    #     $ptaSpyPath = "C:\PTASpy"
-    #     if (Test-Path $ptaSpyPath) {
-    #         $findings += "PTA Spy directory exists at $ptaSpyPath."
-    #     } else {
-    #         $findings += "PTA Spy directory does NOT exist."
-    #     }
-
-    #     # Determine the status and score based on findings
-    #     if ($ptaModule -and (Test-Path $ptaSpyPath)) {
-    #         $result.Status = "Fail"
-    #         $result.FindingSummary = "PTA Spy components detected on this machine. Immediate action is required."
-    #     } else {
-    #         $result.Status = "Pass"
-    #         $result.FindingSummary = "No PTA Spy components detected on this machine."
-    #     }
-
-    #     $result.Findings = $findings
-    # }
-    # catch {
-    #     $result.FindingSummary = "Error: $($_.Exception.Message)"
-    #     $result.Status = "Error"
-    # }
 
     try {
         $technicalDetails = ""

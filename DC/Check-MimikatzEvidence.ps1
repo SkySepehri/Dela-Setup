@@ -4,17 +4,6 @@
         [string]$serverName = $env:COMPUTERNAME
     )
 
-    # $result = @{
-    #     Description            = "Checks for evidence of Mimikatz on the system."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings               = $null
-    #     FindingSummary         = $null
-    #     Score                  = $null
-    #     Remediation            = "Investigate and remediate any potential compromise."
-    #     Status                 = $null
-    # }
-
     $result = @{
         ItemNumber = "ADS031"
         UseCase = "Evidence of Mimikatz"

@@ -4,69 +4,6 @@
         [string]$DomainController
     )
 
-    # try {
-    #     $regPath = "HKLM:\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration"
-
-    #     # Check if the registry path exists
-    #     if (Test-Path $regPath) {
-    #         # Check if EPA permissions are set correctly
-    #         $acl = Get-Acl -Path $regPath
-    #         $epaRule = $acl.Access | Where-Object { $_.IdentityReference -like "*Enrollment Policy Agent*" }
-
-    #         if ($epaRule) {
-    #             $result = @{
-    #                 ItemNumber =  "ADS033"
-    #                 Description = "Check for Enrollment Policy Agent (EPA) permissions."
-    #                 Severity = "Informational"
-    #                 LikelihoodOfCompromise = "Low"
-    #                 Findings = $null
-    #                 FindingSummary = "EPA permissions check completed successfully."
-    #                 Remediation = "No action required."
-    #                 Status = "Pass"
-    #             }
-    #         } else {
-    #             $result = @{
-    #                 Description = "Check for Enrollment Policy Agent (EPA) permissions."
-    #                 Severity = "High"
-    #                 LikelihoodOfCompromise = "High"
-    #                 Findings = $null
-    #                 FindingSummary = "Error: EPA permissions not found."
-    #                 Remediation = "Ensure correct permissions are set for Enrollment Policy Agent (EPA)."
-    #                 Status = "Fail"
-    #             }
-    #         }
-    #     } else {
-    #         # If the registry path does not exist
-    #         $result = @{
-    #             Description = "Check for Enrollment Policy Agent (EPA) permissions."
-    #             Severity = "High"
-    #             LikelihoodOfCompromise = "High"
-    #             Findings = $null
-    #             FindingSummary = "Error: Registry path not found."
-    #             Remediation = "Verify the installation of Certificate Services and the correct registry path."
-    #             Status = "Fail"
-    #         }
-    #     }
-
-    #     return $result
-    # }
-    # catch {
-    #     # If an error occurs during the execution of the function
-    #     $errorMessage = $_.Exception.Message
-    #     $result = @{
-    #         Description = "Error checking for Enrollment Policy Agent (EPA) permissions."
-    #         Severity = "High"
-    #         LikelihoodOfCompromise = "High"
-    #         Findings = $null
-    #         FindingSummary = "Error: $errorMessage"
-    #         Remediation = "Investigate and resolve the issue."
-    #         Status = "Fail"
-    #     }
-
-    #     Write-Error $result.FindingSummary
-    #     return $result
-    # }
-
     $result = @{
         ItemNumber =  "ADS014"
         UseCase = "Misconfigured EPA Permissions"

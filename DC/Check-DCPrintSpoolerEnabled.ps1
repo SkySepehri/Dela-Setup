@@ -2,16 +2,6 @@
     [CmdletBinding()]
     param()
     
-    # $result = @{
-    #     Description            = "Checks if the Print Spooler service is enabled on the Domain Controller."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Disable the Print Spooler service on Domain Controllers for enhanced security."
-    #     Status                 = $null
-    # }
     $result = @{
         ItemNumber = "ADS030"
         UseCase = "DC Print Spooler Misconfiguration"

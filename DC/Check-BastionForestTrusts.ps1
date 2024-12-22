@@ -1,15 +1,4 @@
 ﻿function Check-BastionForestTrusts {
-    # $result = @{
-    #     Description            = "Checks if the current domain is configured as a bastion forest by examining trust relationships and detecting the presence of shadow principals."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings               = $null
-    #     FindingSummary         = $null
-    #     Score                  = $null
-    #     Remediation            = "If a bastion forest configuration is detected, review trust relationships and shadow principals to ensure they are properly secured."
-    #     Status                 = $null
-    # }
-
     $result = @{
         ItemNumber = "ADS033"
         UseCase = "PAM Trust - Bastion Forest Trusts"
@@ -23,40 +12,6 @@
         Status = $null
         ErrorMsg = $null 
     }
-
-    # try {
-    #     $findings = @()
-
-    #     # Step 1: Get trust relationships where ForestTransitive is true and SIDFiltering is disabled
-    #     $vulnerableTrusts = Get-ADTrust -Filter {(ForestTransitive -eq $True) -and (SIDFilteringQuarantined -eq $False)}
-
-    #     # Step 2: Check for Shadow Principals if vulnerable trusts are found
-    #     if ($vulnerableTrusts.Count -gt 0) {
-    #         $shadowPrincipals = Get-ADObject -SearchBase ("CN=Shadow Principal Configuration,CN=Services," + (Get-ADRootDSE).configurationNamingContext) -Filter * -Properties * | select Name,member,msDS-ShadowPrincipalSid
-
-    #         if ($shadowPrincipals.Count -gt 0) {
-    #             $vulnerableTrusts | ForEach-Object {
-    #                 $findings += "Trust with $($_.TargetDomainName) is transitive, does not have SID filtering enabled, and shadow principals exist."
-    #             }
-    #             $result.Status = "Fail"
-    #             $result.FindingSummary = "Bastion forest configuration detected. Immediate action required."
-    #         } else {
-    #             $result.Status = "Warning"
-    #             $result.FindingSummary = "Vulnerable trust relationships detected but no shadow principals found. Further investigation required."
-    #         }
-    #     } else {
-    #         $result.Status = "Pass"
-    #         $result.FindingSummary = "No vulnerable trust relationships detected."
-    #     }
-
-    #     $result.Findings = $findings
-    # }
-    # catch {
-    #     $result.FindingSummary = "Error: $($_.Exception.Message)"
-    #     $result.Status = "Error"
-    # }
-
-    # return $result
 
     try {
         $technicalDetails = ""

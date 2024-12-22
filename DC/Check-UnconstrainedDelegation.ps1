@@ -1,6 +1,8 @@
 ﻿function Check-UnconstrainedDelegation {
     [CmdletBinding()]
-    param()
+    param (
+        [Hashtable]$settings
+    )
 
     # $result = @{
     #     Description            = "Checks for Unconstrained Delegation settings in Active Directory."
@@ -26,10 +28,6 @@
         MITREMapping = "[MITRE] T1187: Forced Authentication"
         Status = $null
         ErrorMsg = $null 
-    }
-
-    $settings = @{
-        'domainController.name' = "DC01"
     }
 
     # try {
@@ -76,6 +74,10 @@
     return $result
 }
 
-# Example usage
-$result = Check-UnconstrainedDelegation
+$settings = @{
+    'domainController.name' = $args[0]
+    'domainController.forest' = $args[1]
+}
+
+$result = Check-UnconstrainedDelegation -settings $settings
 Write-Output $result | ConvertTo-Json -Depth 10

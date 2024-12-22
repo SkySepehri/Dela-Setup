@@ -34,38 +34,6 @@
         ErrorMsg = $null 
     }
     
-    # $result = [PSCustomObject]@{
-    #     Description            = "Checks for recently modified Group Policy Objects in Active Directory."
-    #     Severity               = "Medium"
-    #     LikelihoodOfCompromise = "Medium"
-    #     Findings               = $null
-    #     FindingSummary         = $null
-    #     Score                  = $null
-    #     Remediation            = "Review recent changes to Group Policy Objects and ensure they are authorized."
-    #     Status                 = $null
-    # }
-    
-    # try {
-    #     # Calculate the date threshold
-    #     $thresholdDate = (Get-Date).AddDays(-$daysThreshold)
-    
-    #     # Get recently modified GPOs
-    #     $recentlyModifiedGPOs = Get-GPO -All | Where-Object { $_.ModificationTime -ge $thresholdDate }
-    
-    #     if ($recentlyModifiedGPOs.Count -gt 0) {
-    #         $result.Status = "Fail"
-    #         $result.Findings = $recentlyModifiedGPOs.ModificationTime
-    #         $result.FindingSummary = "Fail: Recently modified Group Policy Objects found."
-    #     } else {
-    #         $result.Status = "Pass"
-    #         $result.FindingSummary = "Pass: No recently modified Group Policy Objects found within the specified threshold."
-    #     }
-    
-    # } catch {
-    #     $errstr = $_.Exception.Message
-    #     $result.Status = "Fail"
-    #     $result.FindingSummary = "Error: $errstr"
-    # }
 
     try {
         # Calculate the date threshold

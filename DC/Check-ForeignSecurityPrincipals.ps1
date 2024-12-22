@@ -2,16 +2,6 @@
     [CmdletBinding()]
     param()
     
-    # $result = @{
-    #     Description            = "Checks for Foreign Security Principals in Active Directory."
-    #     Severity               = "Medium"
-    #     LikelihoodOfCompromise = "Medium"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Review and manage Foreign Security Principals based on trust relationships."
-    #     Status                 = $null
-    # }
 
     $result = @{
         ItemNumber = "ADS025"

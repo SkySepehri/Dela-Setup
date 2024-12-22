@@ -1,17 +1,6 @@
 ﻿function Check-AdminSDHolderInheritance {
     [CmdletBinding()]
     param()
-  
-    # $result = @{
-    #     Description            = "Checks if inheritance is enabled on the AdminSDHolder object in Active Directory."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Enable inheritance on the AdminSDHolder object to ensure consistent security settings."
-    #     Status                 = $null
-    # }
 
     $result = @{
         ItemNumber = "ADS009"

@@ -1,88 +1,47 @@
 ﻿function Check-AgedComputerPasswords {
     [CmdletBinding()]
-    param()
-  
-    # $result = @{
-    #     Description            = "Checks for aged computer passwords in the Active Directory."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Investigate and address any computers with aged passwords."
-    #     Status                 = $null
-    # }
+    param (
+        [string]$Server
+    )
 
     $result = @{
         ItemNumber = "ADS002"
-        UseCase = "Aged Computer Passwords"
-        WeightedScore = 25
+        UseCase = "Check Aged Computer Passwords"
+        WeightedScore = 5
         TechnicalInformation = "Aged computer passwords in Active Directory refer to machine account passwords that have not been updated for an extended period. If left unchanged, these stale passwords can be exploited by attackers to maintain persistent access to the network."
         Category = "Account Hygiene"
-        TechnicalDetails = $null # will fullfill later 
-        RemedediationSolution = 
-        "Regularly checking and updating computer passwords reduces the risk of unauthorized access through compromised accounts."
-        MITREMapping = "[MITRE] T1201: Password Policy Discovery "
+        TechnicalDetails = $null # will fulfill later 
+        RemedediationSolution = "Regularly checking and updating computer passwords reduces the risk of unauthorized access through compromised accounts."
+        MITREMapping = "[MITRE] T1201: Password Policy Discovery"
         Status = $null
         ErrorMsg = $null 
     }
 
-    $settings = @{
-        'domainController.name' = "DC01"
-    }
-  
     try {
-        # Get all computers in the domain
-        $computers = Get-ADComputer -Server $settings.'domainController.name' -Filter *
-  
-        # Get the maximum password age from the domain password policy
-        $maxPwdAge = (Get-ADDefaultDomainPasswordPolicy).MaxPasswordAge
-  
-        # Calculate the maximum password age in days
-        $maxPwdAgeDays = $maxPwdAge.Days
-  
         # Get the current date
         $currentDate = Get-Date
-  
-        # Calculate the maximum password age cutoff date
-        $cutoffDate = $currentDate.AddDays(-$maxPwdAgeDays)
-  
-        # Check each computer for aged passwords
-        $agedPasswords = foreach ($computer in $computers) {
-            $passwordLastSet = $computer.PasswordLastSet
-  
-            if ($passwordLastSet -lt $cutoffDate) {
-                $computer
-            }
-        }
-  
-        # if ($agedPasswords.Count -gt 0) {
-        #     $result.Status = "Fail"
-        #     $result.Findings = $agedPasswords
-        #     $result.TechnicalDetails = "Fail: Aged computer passwords found in the Active Directory."
-        # } else {
-        #     $result.Status = "Pass"
-        #     $result.TechnicalDetails = "Pass: No aged computer passwords found in the Active Directory."
-        # }
 
-        if ($agedPasswords.Count -gt 0) {
+        # Query Active Directory for computer accounts with passwords older than 30 days
+        $agedComputerPasswords = Get-ADComputer -Server $Server -Filter * -Properties PasswordLastSet | Where-Object {
+            ($currentDate - $_.PasswordLastSet).Days -gt 30
+        }
+
+        if ($agedComputerPasswords.Count -gt 0) {
             $result.Status = "Fail"
-            $result.TechnicalDetails = "Fail: Aged computer passwords found in the Active Directory. Affected computers: $($agedPasswords | ForEach-Object { $_.Name } | Join-String -Separator ', ')"
+            $result.TechnicalDetails = $agedComputerPasswords | Select-Object Name, PasswordLastSet
         } else {
             $result.Status = "Pass"
-            $result.TechnicalDetails = "Pass: No aged computer passwords found in the Active Directory."
+            $result.TechnicalDetails = "No computer accounts with aged passwords found."
         }
-        
-  
     } catch {
-        $errstr = $_.Exception.Message
-        $result.Status = "Fail"
-        $result.TechnicalDetails = "Error: $errstr"
+        $result.Status = "Error"
+        $result.ErrorMsg = $_.Exception.Message
     }
-  
+
     return $result
-  }
+}
 
 # Example usage
-$result = Check-AgedComputerPasswords
-Write-Output $result | ConvertTo-Json -Depth 10
+$Server = "Vul-DC"
+$result = Check-AgedComputerPasswords -Server $Server
+Write-Output $result

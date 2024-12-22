@@ -43,3 +43,9 @@ function Check-AccountLockoutPolicy {
 # Example usage
 $result = Check-AccountLockoutPolicy
 Write-Output $result | ConvertTo-Json -Depth 10
+
+# Command to run the test case and achieve a "pass" status
+# Set-ADDefaultDomainPasswordPolicy -Identity $currentDomain.DistinguishedName -LockoutThreshold 0 -LockoutDuration 0 -LockoutObservationWindow 0
+
+# Command to run the test case and achieve a "pass" status
+# Set-ADDefaultDomainPasswordPolicy -Identity Vul-DC -LockoutThreshold 5 -LockoutDuration 30 -LockoutObservationWindow 15

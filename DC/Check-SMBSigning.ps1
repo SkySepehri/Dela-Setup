@@ -2,17 +2,6 @@
     [CmdletBinding()]
     param()
     
-    # $result = @{
-    #     Description            = "Checks if SMB signing is enabled on the system."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "Medium"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Enable SMB signing for enhanced security."
-    #     Status                 = $null
-    # }
-
     $result = @{
         ItemNumber = "ADS019"
         UseCase = "Disabled SMB Signing and Relaying NTLMv2 Hashes"
@@ -68,3 +57,6 @@ This approach enhances network security against SMB relay attacks by properly co
 # Example usage
 $result = Check-SMBSigning
 Write-Output $result| ConvertTo-Json -Depth 10
+
+# Command to disable SMB signing
+# Set-SmbServerConfiguration -RequireSecuritySignature $false -Force

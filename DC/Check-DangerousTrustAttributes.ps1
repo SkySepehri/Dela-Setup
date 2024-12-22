@@ -2,17 +2,6 @@
     [CmdletBinding()]
     param()
     
-    # $result = @{
-    #     Description            = "Checks for trusts with Dangerous attributes in the Active Directory."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Review and adjust trust attributes to mitigate security risks."
-    #     Status                 = $null
-    # }
-
     $result = @{
         ItemNumber = "ADS027"
         UseCase = "Dangerous Trust Attribute Set"

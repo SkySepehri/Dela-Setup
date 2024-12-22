@@ -1,26 +1,9 @@
-﻿$settings = @{
-    'domainController.name' = "DC01"
-    'domainController.forest' = "example.com"
-}
-
-function Check-DomainOwnership {
+﻿function Check-DomainOwnership {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
-        [PSCustomObject]$settings
+        [Hashtable]$settings
     )
     
-    # $result = @{
-    #     Description            = "Checks ownership of a specific domain in Active Directory."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Investigate and address any unauthorized ownership changes."
-    #     Status                 = $null
-    # }
-
     $result = @{
         ItemNumber = "ADS006"
         UseCase = "Domain Ownership"
@@ -33,36 +16,16 @@ function Check-DomainOwnership {
         Status = $null
         ErrorMsg = $null 
     }
-    
-    # try {
-    #     # Get the forest root domain
-    #     $forestRootDomain = (Get-ADForest -Server $settings.'domainController.name').RootDomain
-    
-    #     if ($settings.'domainController.forest' -eq $forestRootDomain) {
-    #         $result.Status = "Pass"
-    #         $result.FindingSummary = "Pass: The specified domain is the forest root domain and is owned appropriately."
-    #     } else {
-    #         $result.Status = "Fail"
-    #         $result.FindingSummary = "Fail: The specified domain is not the forest root domain or ownership is unauthorized."
-    #     }
-    
-    # } catch {
-    #     $errstr = $_.Exception.Message
-    #     $result.Status = "Fail"
-    #     $result.FindingSummary = "Error: $errstr"
-    # }
 
     try {
             # Get the forest root domain
             $forestRootDomain = (Get-ADForest -Server $settings.'domainController.name').RootDomain
         
-            if ($settings.'domainController.forest' -eq $forestRootDomain) {
-                # Write-Host $forestRootDomain
-                # Write-Host $settings.'domainController.forest'
+            if ($settings.'domainController.name' -eq $forestRootDomain) {
                 $result.Status = "Pass"
             } else {
                 $result.Status = "Fail"
-                $TechnicalDetails = "The current domain '" + $settings.'domainController.forest' + "' does not match the forest root domain '" + $forestRootDomain + "'."
+                $TechnicalDetails = "The current domain '" + $settings.'domainController.name' + "' does not match the forest root domain '" + $forestRootDomain + "'."
             }
         
         } catch {
@@ -74,6 +37,10 @@ function Check-DomainOwnership {
     return $result
     }
 
-# Example usage
+
+$settings = @{
+    'domainController.name' = $args[0]
+}
+
 $result = Check-DomainOwnership -settings $settings
 Write-Output $result | ConvertTo-Json -Depth 10

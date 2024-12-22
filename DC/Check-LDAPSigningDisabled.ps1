@@ -41,3 +41,6 @@ Open gpedit.msc and navigate to Computer Configuration > Administrative Template
 $Server = "your-server-name"
 $result = Check-LDAPSigningDisabled -Server $Server
 Write-Output $result| ConvertTo-Json -Depth 10
+
+# PS command to disable LDAP signing
+# Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" -Name "LDAPServerIntegrity" -Value 0

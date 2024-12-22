@@ -38,3 +38,6 @@
 # Example usage
 $result = Check-AnonymousAccessToAD
 Write-Output $result| ConvertTo-Json -Depth 10
+
+# PS Command to enable anonymous access to Active Directory
+# Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\NTDS\Parameters" -Name "Anonymous Logon" -Value 1

@@ -2,17 +2,6 @@
     [CmdletBinding()]
     param()
     
-    # $result = @{
-    #     Description            = "Checks if the built-in Guest account is enabled in Active Directory."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Disable the built-in Guest account for enhanced security."
-    #     Status                 = $null
-    # }
-
     $result = @{
         ItemNumber = "ADS001"
         UseCase = "Built-in Guest Account Enabled"
@@ -60,3 +49,6 @@
 # Example usage
 $result =  Check-BuiltInGuestAccountEnabled
 Write-Output $result | ConvertTo-Json -Depth 10
+
+# PS Command to enable the built-in Guest account in Active Directory
+# Enable-ADAccount -Identity Guest

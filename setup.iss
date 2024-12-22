@@ -8,8 +8,10 @@ OutputBaseFilename=DelaToolSetup
 Compression=lzma
 SolidCompression=yes
 
+
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional Icons:"; Flags: unchecked
+
 
 [Files]
 Source: "agent.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: ShouldInstallAgent
@@ -113,7 +115,6 @@ end;
 
 procedure OnInstallAgentRadioButtonClick(Sender: TObject);
 begin
-  PythonToolPortEdit.Enabled := True;
   InstallationChoice := 1;
 end;
 
@@ -202,7 +203,7 @@ end;
 
   AWSUsernameLabel := TLabel.Create(InputPage.Surface);
   AWSUsernameLabel.Parent := InputPage.Surface;
-  AWSUsernameLabel.Caption := 'Agent Username:';
+  AWSUsernameLabel.Caption := 'Dela Username:';
   AWSUsernameLabel.Left := 10;
   AWSUsernameLabel.Top := 20;
 
@@ -214,7 +215,7 @@ end;
 
   AWSPasswordLabel := TLabel.Create(InputPage.Surface);
   AWSPasswordLabel.Parent := InputPage.Surface;
-  AWSPasswordLabel.Caption := 'Agent Password:';
+  AWSPasswordLabel.Caption := 'Dela Password:';
   AWSPasswordLabel.Left := 10;
   AWSPasswordLabel.Top := 80;
 
@@ -224,20 +225,6 @@ end;
   AWSPasswordEdit.Top := 100;
   AWSPasswordEdit.Width := AWSUsernameEdit.Width;
   AWSPasswordEdit.PasswordChar := '*';
-
-  PythonToolPortLabel := TLabel.Create(InputPage.Surface);
-  PythonToolPortLabel.Parent := InputPage.Surface;
-  PythonToolPortLabel.Caption := 'Dela Tool Address (IP:PORT):';
-  PythonToolPortLabel.Left := 10;
-  PythonToolPortLabel.Top := 140;
-
-  PythonToolPortEdit := TEdit.Create(InputPage.Surface);
-  PythonToolPortEdit.Parent := InputPage.Surface;
-  PythonToolPortEdit.Left := 10;
-  PythonToolPortEdit.Top := 160;
-  PythonToolPortEdit.Width := AWSUsernameEdit.Width;
-  PythonToolPortEdit.Text := 'localhost:10060';
-  PythonToolPortEdit.Enabled := False; 
 
 end;
 
@@ -249,8 +236,7 @@ begin
   begin
     AWSUsername := AWSUsernameEdit.Text;
     AWSPassword := AWSPasswordEdit.Text;
-    PythonToolPort := PythonToolPortEdit.Text;
-
+ 
     if AWSUsername = '' then
     begin
       MsgBox('Username cannot be empty.', mbError, MB_OK);
@@ -265,13 +251,6 @@ begin
       Exit;
     end;
 
-    if not IsValidPort(PythonToolPort) then
-    begin
-      MsgBox('Dela Tool Address must be in the format IP:PORT.', mbError, MB_OK);
-      Result := False;
-      Exit;
-    end;
-    
   end;
 end;
 

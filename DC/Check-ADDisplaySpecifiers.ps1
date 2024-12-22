@@ -2,16 +2,6 @@
     [CmdletBinding()]
     param()
   
-    # $result = @{
-    #     Description            = "Checks for AD Display Specifiers in Active Directory."
-    #     Severity               = "High"
-    #     LikelihoodOfCompromise = "High"
-    #     Findings          = $null
-    #     FindingSummary          = $null
-    #     Score                  = $null
-    #     Remediation            = "Review and secure AD Display Specifiers to prevent unauthorized modifications."
-    #     Status                 = $null
-    # }
 
     $result = @{
         ItemNumber = "ADS024"
@@ -43,8 +33,6 @@
         
             $result.Status = "Fail"
             $result.TechnicalDetails = "AD Display Specifiers found in Active Directory. Display Specifiers Count: $($displaySpecifiers.Count)`n`nFirst 5 Display Specifiers:`n" + ($limitedSpecifiers | Format-List | Out-String)
-            # $result.Findings = $limitedSpecifiers
-            # $result.FindingSummary = "Fail: AD Display Specifiers found in Active Directory. Display Specifiers Count: $($limitedSpecifiers.Count)"
         } else {
             $result.Status = "Pass"
             $result.TechnicalDetails = "Pass: No AD Display Specifiers found in Active Directory."
